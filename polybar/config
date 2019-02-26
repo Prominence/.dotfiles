@@ -1,0 +1,257 @@
+; Configuration guide: https://github.com/jaagr/polybar/wiki/Configuration
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+[colors]
+background = #00ffffff
+foreground = #ffffffff
+underline = #ffffffff
+urgent = #ff993333
+
+
+
+[bar/main]
+
+monitor = DP-4
+
+width = 100%
+height = 25
+radius = 0
+fixed-center = false
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color =
+
+border-size = 0
+border-color =
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = "Source Code Pro Semibold:size=10;1"
+font-1 = "Font Awesome 5 Free:style=Solid:size=10;1"
+font-2 = "Font Awesome 5 Brands:size=10;1"
+font-3 = "Material Icons:size=10;-1"
+
+modules-left = i3
+modules-center = 
+modules-right = mpd pulseaudio keyboard date
+
+tray-position = center
+;tray-padding =
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+; https://github.com/jaagr/polybar/wiki/Module:-i3
+[module/i3]
+type = internal/i3
+
+index-sort = true
+strip-wsnumbers = true
+enable-scroll = false
+
+ws-icon-0 = 1:www;
+ws-icon-1 = 2:msgr;
+ws-icon-2 = 3:code;
+ws-icon-3 = 4:term;
+ws-icon-4 = 5:music;
+ws-icon-5 = 6:steam;
+ws-icon-default = 
+
+label-focused = %icon%
+label-focused-underline = ${colors.underline}
+label-focused-padding = 2
+
+label-unfocused = %icon%
+label-unfocused-padding = 2
+
+label-visible = %icon%
+label-visible-padding = 2
+
+label-urgent = %icon%
+label-urgent-underline = ${colors.urgent}
+label-urgent-padding = 2
+
+; https://github.com/jaagr/polybar/wiki/Module:-xkeyboard
+[module/keyboard]
+type = internal/xkeyboard
+
+; List of indicators to ignore
+blacklist-0 = num lock
+blacklist-1 = scroll lock
+blacklist-2 = caps lock
+
+; https://github.com/jaagr/polybar/wiki/Module:-mpd
+[module/mpd]
+type = internal/mpd
+
+; Host where mpd is running (either ip or domain name)
+; Can also be the full path to a unix socket where mpd is running.
+host = 127.0.0.1
+port = 6600
+password = 
+
+format-online = <label-song> <bar-progress> <label-time>
+label-offline = mpd is offline
+
+; Only applies if <bar-progress> is used
+bar-progress-width = 30
+bar-progress-indicator = |
+bar-progress-fill = ─
+bar-progress-empty = ─
+
+; https://github.com/jaagr/polybar/wiki/Module:-pulseaudio
+[module/pulseaudio]
+type = internal/pulseaudio
+
+; Interval for volume increase/decrease (in percent points)
+; Default: 5
+interval = 5
+
+; Available tokens:
+;   %percentage% (default)
+label-volume = Volume: %percentage%%
+
+; Available tokens:
+;   %percentage% (default)
+label-muted = Volume: muted
+label-muted-foreground = ${colors.foreground}
+
+; https://github.com/jaagr/polybar/wiki/Module:-date
+[module/date]
+type = internal/date
+interval = 1
+
+date =
+date-alt = %d %B, %Y
+
+time = %H:%M:%S
+time-alt = %H:%M:%S
+
+format-padding = 0
+
+label = %date% %time%
+
+
+
+[bar/systeminfo]
+monitor = HDMI-0
+
+bottom = true
+
+width = 100%
+height = 25
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+
+padding-left = 2
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = "Source Code Pro Semibold:size=8;1"
+font-1 = "Symbol Nerd Font:size=8;1"
+font-2 = "Material Icons:size=8;-1"
+
+
+modules-left = network memory
+modules-center = filesystem
+modules-right = cpu temperature
+
+; https://github.com/jaagr/polybar/wiki/Module:-cpu
+[module/cpu]
+type = internal/cpu
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+
+format = <label> <ramp-coreload>
+label = CPU %percentage%%
+
+; Spacing between individual per-core ramps
+ramp-coreload-spacing = 1
+ramp-coreload-0 = ▁
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+ramp-coreload-7 = █
+
+; https://github.com/jaagr/polybar/wiki/Module:-memory
+[module/memory]
+type = internal/memory
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 3
+
+format = <label>
+label = RAM %gb_used%/%gb_total%
+
+; https://github.com/jaagr/polybar/wiki/Module:-temperature
+[module/temperature]
+type = internal/temperature
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+
+hwmon-path = /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input
+warn-temperature = 70
+units = true
+
+format = <label>
+format-warn = <label-warn>
+label = %temperature-c%
+
+; https://github.com/jaagr/polybar/wiki/Module:-network
+[module/network]
+type = internal/network
+interface = enp7s0
+
+unknown-as-up = true
+
+label-connected = %ifname% %upspeed:9%(up) %downspeed:9%(down)
+label-disconnected = not connected
+label-disconnected-foreground = ${colors.urgent}
+
+; https://github.com/jaagr/polybar/wiki/Module:-filesystem
+[module/filesystem]
+type = internal/fs
+
+; Mountpoints to display
+mount-0 = /
+mount-1 = /home
+mount-2 = /home/prominence/Storage
+
+; Display fixed precision values
+fixed-values = true
+
+; Spacing between entries
+; Default: 2
+spacing = 4
+
+label-mounted = %mountpoint%: %used% of %total%(%percentage_used%%)
+
+label-unmounted = %mountpoint%: not mounted
+label-unmounted-foreground = ${colors.urgent}
