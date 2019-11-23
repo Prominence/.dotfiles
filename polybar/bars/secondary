@@ -1,0 +1,116 @@
+; ==================================================================================
+; Bar definition
+; ==================================================================================
+; https://github.com/polybar/polybar/wiki/Configuration#bar-settings
+
+[bar/secondary]
+monitor = HDMI-0
+
+bottom = true
+
+width = 100%
+height = 20
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+padding-left = 2
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = "Cascadia Code:size=8;1"
+
+tray-position = left
+
+modules-left = 
+modules-center = filesystem
+modules-right = memory cpu temperature-secondary
+
+; ==================================================================================
+; 'filesystem' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-filesystem
+
+[module/filesystem]
+type = internal/fs
+
+; Mountpoints to display
+mount-0 = /
+mount-1 = /home
+mount-2 = /home/prominence/Storage
+
+; Display fixed precision values
+fixed-values = true
+
+; Spacing between entries
+; Default: 2
+spacing = 4
+
+label-mounted = %mountpoint%: %used% of %total%(%percentage_used%%)
+
+label-unmounted = %mountpoint%: not mounted
+label-unmounted-foreground = ${colors.urgent}
+
+; ==================================================================================
+; 'memory' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-memory
+
+[module/memory]
+type = internal/memory
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 3
+
+format = <label>
+label = RAM %gb_used%/%gb_total%
+
+; ==================================================================================
+; 'cpu' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-cpu
+
+[module/cpu]
+type = internal/cpu
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+
+format = <label> <ramp-coreload>
+label = CPU %percentage:3%%
+
+; Spacing between individual per-core ramps
+ramp-coreload-spacing = 1
+ramp-coreload-0 = ▁
+ramp-coreload-1 = ▂
+ramp-coreload-2 = ▃
+ramp-coreload-3 = ▄
+ramp-coreload-4 = ▅
+ramp-coreload-5 = ▆
+ramp-coreload-6 = ▇
+ramp-coreload-7 = █
+
+; ==================================================================================
+; 'temperature-secondary' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-temperature
+
+[module/temperature-secondary]
+type = internal/temperature
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 0.5
+
+hwmon-path = /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input
+warn-temperature = 70
+units = true
+
+format = <label>
+format-warn = <label-warn>
+label = %temperature-c:3%

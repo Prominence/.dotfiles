@@ -1,0 +1,6 @@
+[colors]
+background = #2b303b
+foreground = #ffffff
+urgent = #d4533b
+underline_focused = #e4f1fe
+underline_urgent = #d4533b

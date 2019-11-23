@@ -1,0 +1,275 @@
+; ==================================================================================
+; Bar definition
+; ==================================================================================
+; https://github.com/polybar/polybar/wiki/Configuration#bar-settings
+
+[bar/primary]
+
+monitor = DP-4
+
+width = 100%
+height = 25
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 2
+
+padding-left = 0
+padding-right = 1
+
+module-margin-left = 2
+module-margin-right = 1
+
+font-0 = "Cascadia Code:size=9;1"
+font-1 = "Font Awesome 5 Free:style=Solid:size=9;1"
+font-2 = "Font Awesome 5 Brands:size=9;1"
+font-3 = "Weather Icons:size=9;1"
+
+modules-left = i3 mpd
+modules-center = date weather
+modules-right = cpu-min temperature memory-min filesystem-min wired-down wired-up github updates-count keyboard pulseaudio
+
+cursor-click = pointer
+
+; ==================================================================================
+; 'i3' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-i3
+
+[module/i3]
+type = internal/i3
+
+index-sort = true
+strip-wsnumbers = true
+enable-scroll = false
+
+ws-icon-0 = 1:www;
+ws-icon-1 = 2:msgr;
+ws-icon-2 = 3:code;
+ws-icon-3 = 4:term;
+ws-icon-4 = 5:music;
+ws-icon-5 = 6:steam;
+ws-icon-default = 
+
+label-focused = %icon%
+label-focused-underline = ${colors.underline_focused}
+label-focused-padding = 1
+
+label-unfocused = %icon%
+label-unfocused-padding = 1
+
+label-visible = %icon%
+label-visible-padding = 1
+
+label-urgent = %icon%
+label-urgent-underline = ${colors.underline_urgent}
+label-urgent-padding = 1
+
+; ==================================================================================
+; 'mpd' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-mpd
+
+[module/mpd]
+type = internal/mpd
+
+; Host where mpd is running (either ip or domain name)
+; Can also be the full path to a unix socket where mpd is running.
+host = 127.0.0.1
+port = 6600
+password = 
+
+format-online = <icon-play> <icon-pause> <label-song> [<label-time>]
+
+icon-play = 
+icon-pause = 
+
+label-offline = 🎜 mpd is offline
+
+; ==================================================================================
+; 'date' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-date
+
+[module/date]
+type = internal/date
+interval = 1
+
+date = %{F#d8d8d8d}%{F-} %a %d %b %Y   
+time = %{O10}%{F#d8d8d8d}%{F-} %H:%M:%S
+
+label = %date% %time%
+
+; ==================================================================================
+; 'weather' module definition
+; ==================================================================================
+
+[module/weather]
+type = custom/script
+exec = ~/.config/polybar/custom-scripts/weather/weather.sh
+interval = 600
+label-font = 4
+
+; ==================================================================================
+; 'cpu-min' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-cpu
+
+[module/cpu-min]
+type = internal/cpu
+interval = 1
+label = %{F#50bcff}%{F-} %percentage:2%%
+
+; ==================================================================================
+; 'temperature' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-temperature
+
+[module/temperature]
+type = internal/temperature
+
+; Seconds to sleep between updates
+; Default: 1
+interval = 1
+
+hwmon-path = /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input
+warn-temperature = 70
+units = true
+
+format = <label>
+format-warn = <label-warn>
+label = %{F#ff3333}%{F-} %temperature-c%
+
+; ==================================================================================
+; 'memory-min' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-memory
+
+[module/memory-min]
+type = internal/memory
+interval = 1
+label = %{F#0ae440}%{F-} %percentage_used:2%%
+
+; ==================================================================================
+; 'filesystem-min' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-filesystem
+
+[module/filesystem-min]
+type = internal/fs
+interval = 25
+mount-0 = /
+label-mounted = %{F#fdffe8}%{F-} %percentage_used:2%%
+
+; ==================================================================================
+; 'wired-down' module definition
+; ==================================================================================
+; https://github.com/polybar/polybar/wiki/Module:-network
+
+[module/wired-down]
+type = internal/network
+interface = enp7s0
+interval = 1.0
+
+label-connected = %{F#6AFFF3}%{F-} %downspeed:8%
+
+label-disconnected = 
+
+; ==================================================================================
+; 'wired-up' module definition
+; ==================================================================================
+; https://github.com/polybar/polybar/wiki/Module:-network
+
+[module/wired-up]
+type = internal/network
+interface = enp7s0
+interval = 1.0
+
+label-connected = %{F#B56CF3}%{F-} %upspeed:8%
+
+label-disconnected = 
+
+; ==================================================================================
+; 'github' module definition
+; ==================================================================================
+; https://github.com/polybar/polybar/wiki/Module:-github
+
+[module/github]
+type = internal/github
+
+; Accessing an access token stored in file
+token = ${file:/home/prominence/.config/polybar/github.token}
+
+; Whether empty notifications should be displayed or not
+empty-notifications = false
+
+; Number of seconds in between requests
+interval = 10
+
+; Github API URL (unreleased)
+; Default: https://api.github.com/
+; api-url = https://hub.example.org/api/v3/
+
+; Available tags:
+;   <label> (default)
+format = <label>
+
+; Available tokens:
+;   %notifications% (default)
+; Default: Notifications: %notifications%
+label =  %{F#e7903c}%notifications%%{F-}
+
+; ==================================================================================
+; 'updates-count' module definition
+; ==================================================================================
+
+[module/updates-count]
+type = custom/script
+exec = ~/.config/polybar/custom-scripts/updates/updates.sh
+interval = 600
+
+; ==================================================================================
+; 'xkeyboard' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-xkeyboard
+
+[module/keyboard]
+type = internal/xkeyboard
+
+; List of indicators to ignore
+blacklist-0 = num lock
+blacklist-1 = scroll lock
+blacklist-2 = caps lock
+
+; ==================================================================================
+; 'pulseaudio' module definition
+; ==================================================================================
+; https://github.com/jaagr/polybar/wiki/Module:-pulseaudio
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+; Interval for volume increase/decrease (in percent points)
+; Default: 5
+interval = 5
+
+format-volume = <ramp-volume> <label-volume>
+
+; Available tokens:
+;   %percentage% (default)
+label-volume = %percentage%%
+
+; Available tokens:
+;   %percentage% (default)
+;label-muted = Volume: muted
+;label-muted-foreground = ${colors.foreground}
+
+label-muted =  muted
+label-muted-foreground = #999
+
+; Only applies if <ramp-volume> is used
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 

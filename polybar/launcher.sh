@@ -12,5 +12,5 @@ sleep 1;
 #   polybar i3wmthemer_bar &
 # fi
 
-polybar main &
-polybar systeminfo &
+polybar -r primary &
+polybar -r secondary &
